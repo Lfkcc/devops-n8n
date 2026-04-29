@@ -1,50 +1,120 @@
-Resumo Básico
-SO Debian pela sua simplicidade e já ser de uso natural e comum para este tipo de situação
-A stack usada para conseguir aplicar tudo que foi pedido, criar o usuário e enviar o link com link cadeado foi Docker, Nginx, n8n e Certbot
+# Projeto DevOps - Instalação e Publicação do n8n
 
-Com mais tempo eu poderia evitar melhor os erros básicos de comando que sofri, as travas de toda hora sair do que possuía domínio sobre. Teria já adicionado e organizado melhor as pastas que baixei as bibliotecas e trouxe os comandos para utilizar, feito em uma ordem melhor que não me fizesse voltar atrás para confirmar de novo o que foi feito, onde foi colado e a possibilidade de usar ele.
+Este projeto foi desenvolvido como parte de uma prova prática, onde o objetivo era configurar um ambiente completo para rodar o **n8n** em um servidor, utilizando Docker, Nginx e HTTPS com Certbot.
 
+Mesmo sendo uma tarefa desafiadora para mim, principalmente por ainda estar no começo da minha caminhada na programação e em DevOps, consegui finalizar tudo o que foi solicitado.
 
-Etapa onde ao tentar executar os códigos encontrei problemas pois eles não iam, não consegui usar o comendo sudo, e nem o nano, e quando fui usar o usando whoami
-Percebi que não era o root, esqueci de logar como usuário depois que instalei toda a máquina.
+## Objetivo do Projeto
 
-Após isso ainda não conseguia atualizar e nem progredir na programação porque o que foi instalado do Debian era mínimo demais
-Assim eu procurei como conseguir utilizar estes comandos que precisa, e descobri que precisaria adicionar eles a sources.list diretamente, assim eu escrevi 
-deb http://deb.debian.org/debian trixie main contrib non-free non-free-firmware
-deb http://deb.debian.org/debian trixie-updates main contrib non-free non-free-firmware
-deb http://security.debian.org/debian-security trixie-security main contrib non-free non-free-firmware
+O desafio era preparar um servidor do zero, configurar o ambiente necessário e deixar o n8n acessível através de um domínio com certificado HTTPS ativo.
 
-Salvei e depois pedi o update que estava querendo
-E o debian ainda não estava se conectando ao DNS
-Procurei para ver se não havia erro de internet, mas ela estava se conectando à máquina, então procurei saber o que poderia ser a causa
-Assim, vi que precisaria colocar o nameserver 8.8.8.8 e nameserver 1.1.1.1 dentro forçado e fazer a ligação direta dele em Debian.
-Depois de forçar essa ligação consegui pingar e fazer a conexão
+O resultado final foi a publicação do n8n no endereço definido para o projeto, com acesso seguro via navegador.
 
-Através da resolução destes problemas, eu já consegui fazer com a VM tenha conexão a internet direta, e também garanti que os IPs e conexão sejam as obrigatórias para seu funcionamento, isto sendo resolvido graça a resolução de um problema que não estava esperando.
+## Tecnologias Utilizadas
 
-Agora comecei a fazer o básico novamente após corrigir estes erros de permissão e conexão
+- Debian
+- Docker
+- Docker Compose
+- Nginx
+- n8n
+- Certbot
+- Let's Encrypt
+- Git e SSH
 
-Voltando a fazer o básico novamente após corrigir estes erros de permissão e conexão
+## Por que usei Debian?
 
-Tive problema com curl que não foi instalado, e preciso dele para fazer a instalação do Docker
-Após dar o update consigo Docker funcionando perfeitamente.
-Após instalar o docker eu tive problemas novamente para me dar acesso ao grupo docker, mesmo sendo usuário e estando em root eu não consegui utilizar os comandos. Executei atualizações nos comandos e sistemas, mas não funcionou. Puxando para ver onde o docker compose estava vi que não possuía diretório criado, logo eu não estava na pasta onde ele deveria, dessa forma eu criei um diretório para n8n ligando ao meu usuário e consegui rodar o compose, dando permissão de grupo para mim. 
+Escolhi o Debian por ser um sistema operacional simples, leve e bastante usado em ambientes de servidor. Além disso, era uma opção adequada para o tipo de configuração exigida na prova.
 
-Agora vem a parte de criar o arquivo docker.compose.yml. Eu já havia feito a pasta anteriormente para poder executar os comandos que não estavam sendo feitos por não ligar neste mesmo diretório, então so precisei colar o comando que traz a imagem do n8n e liga ela ao link. De primeira não foi pois errei um sinal no comando mas depois de corrigir e retornar para subir o n8n foi tranquilamente. iniciando sua imagem, conexão, volume e o espaço.
+## Processo de Desenvolvimento
 
-Para fazer a instalação do Nginx foi tranquila, mas deu algum erro na hora de criar sua pasta para diretório, que no fim não descobri qual foi mas apenas ocorreu tranquilamente. Provalmente erro de digitação que se corrigiu depois que eu recriei a pasta novamente. 
-Removi o site padrão que vem com o Nginx para nn dar conflito e depois de checar deu completo e funcionando corretamente a syntax
+Durante a execução do projeto, precisei configurar várias partes do ambiente manualmente.
 
-Finalmente como uma das etapas mais importantes e de encerramento emitir o certificado de HTTPS
+As principais etapas foram:
 
-E, esta que pensei que seria complexa foi simplesmente a reprodução dos comandos genéricos de servidor para requisitar a confirmação
+1. Configuração inicial da máquina Debian.
+2. Correção de permissões de usuário e acesso root.
+3. Ajuste dos repositórios do Debian no arquivo `sources.list`.
+4. Correção de problemas de DNS.
+5. Instalação de pacotes necessários como `sudo`, `nano` e `curl`.
+6. Instalação do Docker e Docker Compose.
+7. Criação do diretório do projeto.
+8. Criação do arquivo `docker-compose.yml`.
+9. Subida do container do n8n.
+10. Configuração do Nginx como proxy reverso.
+11. Remoção do site padrão do Nginx para evitar conflito.
+12. Configuração do domínio.
+13. Emissão do certificado HTTPS com Certbot.
+14. Criação da conta owner no n8n.
+15. Organização e envio do projeto para o GitHub.
+
+## Principais Dificuldades
+
+No início, tive bastante dificuldade com coisas básicas do ambiente Linux.
+
+Uma das primeiras dificuldades foi perceber que eu não estava logado como usuário correto. Ao tentar executar comandos como `sudo` e `nano`, eles não funcionavam. Depois de usar o comando `whoami`, percebi que o problema estava relacionado ao usuário e às permissões.
+
+Também tive problemas porque a instalação do Debian estava muito mínima. Algumas ferramentas importantes não estavam instaladas, então precisei ajustar os repositórios manualmente no `sources.list` para conseguir atualizar o sistema e instalar os pacotes necessários.
+
+Outro problema foi a conexão com DNS. A máquina tinha internet, mas não conseguia resolver os endereços corretamente. Para corrigir isso, precisei configurar manualmente os nameservers:
+
+bash
+nameserver 8.8.8.8
+nameserver 1.1.1.1
+
+Depois disso, consegui fazer os testes de conexão e continuar a instalação.
+
+Instalação do Docker
+
+Após resolver os problemas de permissão, DNS e atualização do sistema, consegui instalar o Docker.
+
+Também tive dificuldade com o Docker Compose, principalmente por causa do diretório correto onde o projeto deveria ficar. Depois de entender melhor a estrutura, criei uma pasta específica para o n8n, ajustei as permissões e consegui executar o docker compose.
+
+Configuração do n8n
+
+Com o Docker funcionando, criei o arquivo docker-compose.yml para subir o n8n.
+
+Na primeira tentativa, cometi um erro de digitação no arquivo, mas depois de corrigir o problema consegui iniciar o container corretamente, com imagem, volume, rede e porta configurados.
+
+Configuração do Nginx
+
+A instalação do Nginx foi mais tranquila, mas ainda tive alguns erros na criação dos arquivos de configuração.
+
+Removi o site padrão do Nginx para evitar conflito e configurei o proxy reverso apontando para o n8n. Depois disso, validei a sintaxe da configuração e reiniciei o serviço.
+
+Certificado HTTPS
+
+Uma das partes mais importantes do projeto era deixar o domínio com HTTPS.
+
+Achei que essa etapa seria uma das mais difíceis, mas acabou sendo mais simples do que eu imaginava. Utilizei o Certbot com Nginx para gerar o certificado SSL:
+
 sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d devopstest.fuzzytech.com.br
 sudo certbot renew --dry-run
 
-A maior parte dos problemas até agora foi organizar as 'ferramentas' que usaria para fazer os comandos no Console, criar o root, ativar minhas permissões, bibliotecas e afins. A reprodução de código no Console depois disto fica simples e prática.
+Após isso, o domínio passou a funcionar com cadeado de segurança no navegador.
 
-A criação da conta owner no n8n funcionou tranquilamente, não houve nenhum problema de conexão já pensando como eu resolvi os problemas que tiveram no início.
+Finalização no GitHub
 
+Na etapa final, tive dificuldade para subir o projeto para o GitHub porque o console não permitia copiar e colar facilmente o token de acesso.
 
-Na finalização para subir em git acabei tendo o problema que o console não é possível de copiar nada, nem no histórico ou enquanto escrevo, e para fazer o uso do token e sua larga quantidade de caracteres eu procurei alternativas de possibilitar o ctrl+C ou ctrl+v, desde abrindo meu computador como usuário para usar o CMD do windows, como outras variáveis até desistir e ir para a chave SSH que eu poderia copiar para o browser ao menos.
+Tentei algumas alternativas, mas acabei optando por usar chave SSH, que foi uma solução melhor para autenticar e enviar o projeto para o repositório.
+
+Resultado Final
+
+No final, consegui entregar o ambiente funcionando com:
+
+n8n rodando em container Docker;
+Nginx configurado como proxy reverso;
+domínio apontando corretamente;
+HTTPS ativo com Certbot;
+conta owner criada no n8n;
+projeto versionado no GitHub.
+O que aprendi
+
+Esse projeto foi bem importante para mim porque me obrigou a sair da zona de conforto.
+
+Tive dificuldades com comandos, permissões, DNS, instalação de pacotes, Docker, Nginx e Git. Mesmo assim, fui pesquisando, testando e corrigindo cada erro até conseguir finalizar.
+
+Com mais tempo e experiência, eu organizaria melhor as etapas desde o início, criaria os diretórios em uma ordem mais clara e evitaria alguns erros básicos de comando. Mas, apesar das dificuldades, consegui concluir tudo o que foi pedido na prova.
+
+Esse projeto me mostrou que, mesmo começando e ainda tendo muito para aprender, é possível resolver problemas reais com paciência, pesquisa e prática.até desistir e ir para a chave SSH que eu poderia copiar para o browser ao menos.
